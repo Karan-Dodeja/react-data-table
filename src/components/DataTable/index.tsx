@@ -1,4 +1,5 @@
 import { useState } from "react";
+import * as XLSX from "xlsx";
 import { ColumnData, sortType } from "../../types";
 
 interface DataTableProps {
@@ -43,6 +44,26 @@ const DataTable: React.FC<DataTableProps> = ({
 
     setSortConfig({ key: accessor, direction });
   };
+
+  const exportTableExcel = () => {
+    const exportData = rows.map((row) => {
+      const exportRow: { [key: string]: string | boolean } = {};
+      columns.forEach((column) => {
+        if (row[column]) {
+          exportRow[column] = row[column] as string | boolean;
+        } else {
+          exportRow[column] = "FALSE";
+        }
+      });
+      return exportRow;
+    });
+    const workSheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workSheet, workbook, "Sheet1");
+    XLSX.writeFile(workbook, "data.xls");
+  };
+
+  // const handleRowSelect = (rowINdex: number) => {};
 
   return <div></div>;
 };
