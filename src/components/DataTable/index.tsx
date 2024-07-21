@@ -31,6 +31,19 @@ const DataTable: React.FC<DataTableProps> = ({
     setSearchTerm(event.target.value);
     setCurrentPage(0);
   };
+  const handleSort = (accessor: string) => {
+    let direction: "asc" | "dec" | null = "asc";
+    if (sortConfig && sortConfig.key === accessor) {
+      if (sortConfig.direction === "asc") {
+        direction = "dec";
+      } else if (sortConfig && sortConfig.key === "desc") {
+        direction = null;
+      }
+    }
+
+    setSortConfig({ key: accessor, direction });
+  };
+
   return <div></div>;
 };
 
