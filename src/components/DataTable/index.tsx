@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import * as XLSX from "xlsx";
 import { ColumnData, sortType } from "../../types";
 import { data } from "./../../data/index";
@@ -85,6 +85,49 @@ const DataTable: React.FC<DataTableProps> = ({
     });
     setSelectedRows([]);
   };
+
+  const rows = useMemo(() => {
+    return Array.from({ length: rowCount }, (_, index) => {
+      return columns.reduce((acc, column) => {
+        acc[column] = data[column].values[index] || "";
+        return acc;
+      }, {} as { [key: string]: string | boolean | number });
+    });
+  }, [data, columns, rowCount]);
+
+  const sortedRows = useMemo(() => {
+    if (!sortConfig || !sortConfig.direction) {
+      return rows;
+    }
+    return [...rows].sort((a, b) => {
+      const aValue = a[sortConfig.key] as string;
+      const bValue = b[sortConfig.key] as string;
+      if (aValue < bValue) {
+        return sortConfig.direction === "asc" ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return sortConfig.direction === "asc" ? 1 : -1;
+      }
+      return 0;
+    });
+  }, [rows, sortConfig]);
+
+  const filteredRows = useMemo(() => {
+    return sortedRows.filter((row) =>
+      columns.some((column) =>
+        String(row[column])
+          .toLocaleLowerCase()
+          .includes(searchTerm.toLocaleLowerCase())
+      )
+    );
+  }, [sortedRows, searchTerm, columns]);
+
+  const paginatedRows = useMemo(() => {
+    const start = currentPage * pageSize;
+    return filteredRows.slice(start, start + pageSize);
+  }, [filteredRows, currentpage, pageSize]);
+
+  const totalPages = Math.ceil(filteredRows.length / pageSize);
 
   return <div></div>;
 };
