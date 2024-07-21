@@ -63,7 +63,16 @@ const DataTable: React.FC<DataTableProps> = ({
     XLSX.writeFile(workbook, "data.xls");
   };
 
-  // const handleRowSelect = (rowINdex: number) => {};
+  const handleRowSelect = (rowINdex: number) => {
+    const selectedRowIndex = selectedRows.indexOf(String(rowINdex));
+    if (selectedRowIndex === -1) {
+      setSelectedRows([...selectedRows, String(rowINdex)]);
+    } else {
+      const updatedSelectRows = [...selectedRows];
+      updatedSelectRows.splice(selectedRowIndex);
+      setSelectedRows(updatedSelectRows);
+    }
+  };
 
   return <div></div>;
 };
