@@ -1,6 +1,7 @@
 import { useState } from "react";
 import * as XLSX from "xlsx";
 import { ColumnData, sortType } from "../../types";
+import { data } from "./../../data/index";
 
 interface DataTableProps {
   data: ColumnData;
@@ -72,6 +73,17 @@ const DataTable: React.FC<DataTableProps> = ({
       updatedSelectRows.splice(selectedRowIndex);
       setSelectedRows(updatedSelectRows);
     }
+  };
+
+  const handleDaleteSelectedRows = () => {
+    const updatedData = { ...data };
+    selectedRows.forEach((rowIndexString) => {
+      const rowIndex = parseInt(rowIndexString, 10);
+      columns.forEach((column) => {
+        updatedData[column].values.splice(rowIndex, 1);
+      });
+    });
+    setSelectedRows([]);
   };
 
   return <div></div>;
