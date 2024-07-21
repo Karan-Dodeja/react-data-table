@@ -7,7 +7,8 @@ body {
   margin: 0px;
   padding: 0px;
   min-width: 100vw;
-  max-height: 100vh;
+  display: flex;
+  min-height: 100vh;
   background: #1f1f1f;
   color: #fff;
   overflow-x: hidden;
