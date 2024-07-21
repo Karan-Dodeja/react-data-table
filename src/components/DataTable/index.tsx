@@ -27,6 +27,10 @@ const DataTable: React.FC<DataTableProps> = ({
   const [sortConfig, setSortConfig] = useState<sortType | null>(null);
   const [pageSize, setPageSize] = useState(10);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+    setCurrentPage(0);
+  };
   return <div></div>;
 };
 
